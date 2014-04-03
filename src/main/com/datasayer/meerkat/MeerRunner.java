@@ -15,4 +15,10 @@ public class MeerRunner extends BSP<Writable, Writable, Writable, Writable, Writ
     
   }
 
+  @Override
+  public void setup(
+      BSPPeer<Writable, Writable, Writable, Writable, Writable> peer)
+      throws IOException, SyncException, InterruptedException {
+    super.setup(peer);
+  }
 }

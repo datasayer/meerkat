@@ -1,5 +1,7 @@
 package main.com.datasayer.meerkat;
 
-public interface BossMeerInterface {
-  
+import org.apache.hadoop.io.Writable;
+
+public interface BossMeerInterface<M extends Writable> {
+  public void compute();
 }

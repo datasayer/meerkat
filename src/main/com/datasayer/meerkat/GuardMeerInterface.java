@@ -1,5 +1,7 @@
 package main.com.datasayer.meerkat;
 
-public interface GuardMeerInterface {
+import org.apache.hadoop.io.Writable;
+
+public interface GuardMeerInterface<M extends Writable> {
   public void compute();
 }

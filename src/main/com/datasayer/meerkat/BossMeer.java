@@ -1,5 +1,7 @@
 package main.com.datasayer.meerkat;
 
-public class BossMeer implements BossMeerInterface {
+import org.apache.hadoop.io.Writable;
+
+public abstract class BossMeer<M extends Writable> implements BossMeerInterface<M> {
 
 }

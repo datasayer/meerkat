@@ -1,10 +1,7 @@
 package main.com.datasayer.meerkat;
 
-public class GuardMeer implements GuardMeerInterface {
+import org.apache.hadoop.io.Writable;
 
-  @Override
-  public void compute() {
-    
-  }
+public abstract class GuardMeer<M extends Writable> implements GuardMeerInterface<M> {
 
 }
