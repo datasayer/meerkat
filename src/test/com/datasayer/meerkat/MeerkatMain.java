@@ -14,6 +14,9 @@ public class MeerkatMain {
       MeerJob job = new MeerJob(conf);
       job.setNumBspTask(1);
       job.waitForCompletion(true);
+      job.setPollingInterval(5000);
+      job.setGuardMeer(MyGuard.class);
+      job.setBossMeer(MyBoss.class);
     } catch (IOException e) {
       e.printStackTrace();
     } catch (ClassNotFoundException e) {

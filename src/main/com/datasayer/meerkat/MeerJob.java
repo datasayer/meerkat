@@ -22,7 +22,7 @@ public class MeerJob extends BSPJob {
   
   public void setPollingInterval(long interval) {
     this.pollingInterval = interval;
-    this.conf.setLong(MeerAttribute.intervalUri, interval);
+    this.conf.setLong(MeerAttribute.intervalUri, this.pollingInterval);
   }
   
   public void setGuardMeer(Class<? extends GuardMeerInterface> guardmeer) {
