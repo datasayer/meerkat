@@ -14,3 +14,4 @@ Related Sources
 ===============
 
  * http://codingwiththomas.blogspot.kr/2011/10/apache-hama-realtime-processing.html
+ * https://issues.apache.org/jira/browse/HAMA-883
