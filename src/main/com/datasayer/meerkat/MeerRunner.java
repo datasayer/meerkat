@@ -13,13 +13,13 @@ public class MeerRunner extends BSP<Writable, Writable, Writable, Writable, Writ
   private HamaConfiguration conf;
   private int bossIndex = 0;
   private long pollingInterval = MeerAttribute.intervalDefault;
-  private GuardMeerInterface guardmeer;
-  private BossMeerInterface bossmeer;
+  private GuardMeer<Writable> guardmeer;
+  private BossMeer<Writable> bossmeer;
   private BSPPeer<Writable, Writable, Writable, Writable, Writable> peer;
 
   @Override
   public void bsp(BSPPeer<Writable, Writable, Writable, Writable, Writable> peer) throws IOException, SyncException, InterruptedException {
-
+    tail(peer);
   }
 
   @Override
@@ -29,16 +29,21 @@ public class MeerRunner extends BSP<Writable, Writable, Writable, Writable, Writ
     conf = peer.getConfiguration();
     conf.getLong(MeerAttribute.intervalUri, pollingInterval);
     
-    Class<? extends GuardMeerInterface> iguard = conf.getClass(MeerAttribute.guardMeerUri, GuardMeer.class, GuardMeerInterface.class);
-    guardmeer = ReflectionUtils.newInstance(iguard);
+    Class<? extends GuardMeer<Writable>> guardClass = (Class<? extends GuardMeer<Writable>>) conf.getClass(MeerAttribute.guardMeerUri, GuardMeer.class, GuardMeerInterface.class);
+    guardmeer = ReflectionUtils.newInstance(guardClass);
     guardmeer.setBossIndex(this.bossIndex);
-    ((GuardMeer)guardmeer).setMeerRunner(this);
+    guardmeer.setMeerRunner(this);
     
-    Class<? extends BossMeerInterface> iboss = conf.getClass(MeerAttribute.bossMeerUri, BossMeer.class, BossMeerInterface.class);
-    bossmeer = ReflectionUtils.newInstance(iboss);
+    Class<? extends BossMeer<Writable>> bossClass = (Class<? extends BossMeer<Writable>>) conf.getClass(MeerAttribute.bossMeerUri, BossMeer.class, BossMeer.class);
+    bossmeer = ReflectionUtils.newInstance(bossClass);
   }
   
   public final BSPPeer<Writable, Writable, Writable, Writable, Writable> getPeer() {
     return this.peer;
+  }
+  
+  private void tail(BSPPeer<Writable, Writable, Writable, Writable, Writable> peer) {
+    String readLine = "teststring 1";
+    guardmeer.compute(readLine);
   }
 }
