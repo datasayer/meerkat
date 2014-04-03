@@ -11,6 +11,7 @@ public class MeerJob extends BSPJob {
   private HamaConfiguration conf;
   private long pollingInterval = 5000;
   private Class<? extends GuardMeerInterface> guardmeer;
+  private Class<? extends BossMeerInterface> bossmeer;
 
   public MeerJob(HamaConfiguration conf) throws IOException {
     super(conf);
@@ -27,5 +28,10 @@ public class MeerJob extends BSPJob {
   public void setGuardMeer(Class<? extends GuardMeerInterface> guardmeer) {
     this.guardmeer = guardmeer;
     this.conf.setClass(MeerAttribute.guardMeerUri, GuardMeer.class, GuardMeerInterface.class);
+  }
+  
+  public void setBossMeer(Class<? extends BossMeerInterface> bossmeer) {
+    this.bossmeer = bossmeer;
+    this.conf.setClass(MeerAttribute.bossMeerUri, BossMeer.class, BossMeerInterface.class);
   }
 }
