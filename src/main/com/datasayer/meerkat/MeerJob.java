@@ -9,7 +9,7 @@ import org.apache.hama.bsp.NullOutputFormat;
 
 public class MeerJob extends BSPJob {
   private HamaConfiguration conf;
-  private long pollingInterval = 5000;
+  private long pollingInterval = MeerAttribute.intervalDefault;
   private Class<? extends GuardMeerInterface> guardmeer;
   private Class<? extends BossMeerInterface> bossmeer;
 

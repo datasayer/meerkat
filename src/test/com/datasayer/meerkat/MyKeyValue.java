@@ -9,6 +9,11 @@ import org.apache.hadoop.io.Writable;
 public class MyKeyValue implements Writable {
   private String key;
   private int value;
+  
+  public MyKeyValue(String key, int value) {
+    this.key = key;
+    this.value = value;
+  }
 
   @Override
   public void readFields(DataInput in) throws IOException {

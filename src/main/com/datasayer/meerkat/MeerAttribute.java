@@ -4,4 +4,5 @@ public class MeerAttribute {
   public final static String guardMeerUri = "com.datasayer.meerkat.MeerGuard";
   public final static String bossMeerUri = "com.datasayer.meerkat.MeerBoss";
   public final static String intervalUri = "com.datasayer.meerkat.resource.interval";
+  public final static long intervalDefault = 5000L;
 }
