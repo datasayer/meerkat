@@ -4,9 +4,14 @@ Meerkat is a massive event log processing framework on top of Apache Hama, which
 
 Meerkat consists of three major components:
 
- * GuardMeer - The "guard meerkats" are launched directly on the machines that generate the logs. They work as programed. For example, when "guard meerkats" spot a specific event, they report to the all GuardMeer or BossMeer.
+ * GuardMeer - The "guard meerkats" are launched directly on the machines that generate the logs. They work as programmed. For example, when "guard meerkats" spot a specific event, they report to the all GuardMeer or BossMeer.
  * BossMeer - The boss of meerkats is usually aggregate the statistics.
  * MeerCommunicator - A Client library for getting real-time reports.
+
+Future Tasks
+===============
+
+ * The current design requires the installation of Apache Hama on the every machines. To reduce the load of machines (that generate logs), we might want to add agent tier in the future.
 
 License
 ===============
