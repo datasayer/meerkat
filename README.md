@@ -8,7 +8,8 @@ Meerkat consists of three major components:
  * BossMeer - The boss of meerkats is usually aggregate the statistics.
  * MeerCommunicator - A Client library for getting real-time reports.
 
-Future Tasks:
+Future Tasks
+===============
 
  * The current design requires the installation of Apache Hama on the every machines. To reduce the load of machines (that generate logs), we might want to add agent tier in the future.
 
