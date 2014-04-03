@@ -1,6 +1,6 @@
 Meerkat
 ===============
-Meerkat is a real-time massive log event aggregation framework on top of Apache Hama.
+Meerkat is a massive log event aggregation framework on top of Apache Hama, which provides high flexible features for aggregating, analyzing, and comparing data in real-time.
 
 License
 ===============
