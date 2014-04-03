@@ -1,5 +1,7 @@
 Meerkat
 ===============
+![alt tag](http://data3.whicdn.com/images/67297847/original.jpg)
+
 Meerkat is a massive event log processing framework on top of Apache Hama, which provides high flexible features for aggregating, analyzing, and comparing data in real-time.
 
 License
