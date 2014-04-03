@@ -2,14 +2,23 @@ package test.com.datasayer.meerkat;
 
 import main.com.datasayer.meerkat.GuardMeer;
 
+/**
+ * <pre>
+ * test.com.datasayer.meerkat
+ * MyGuard.java
+ * </pre>
+ * 
+ * @author : garuda
+ * 
+ * @param <M> Message Object Type to Send Boss
+ */
 public class MyGuard<M extends MyKeyValue> extends GuardMeer<MyKeyValue> {
 
   @Override
   public void compute(String readLine) {
-    System.out.println(String.format("myguard recieved message : %s", readLine));
-    String[] tmpValue = readLine.split(" ");
-    MyKeyValue message = new MyKeyValue(tmpValue[0],Integer.parseInt(tmpValue[1]));
-    this.sendMessage(message);
+    // data parsing here
+    // and make message to send boss
+    // hey boss! here's my data!! :-)
   }
 
 }
