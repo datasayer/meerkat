@@ -1,5 +1,5 @@
 package main.com.datasayer.meerkat;
 
-public interface BossMeer {
-  
+public class BossMeer implements BossMeerInterface {
+
 }
