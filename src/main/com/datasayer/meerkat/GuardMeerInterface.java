@@ -26,8 +26,6 @@ import org.apache.hadoop.io.Writable;
  * GuardMeerInterface.java
  * </pre>
  * 
- * @author : garuda
- * 
  * @param <M> Message Object Type to Send Boss
  */
 public interface GuardMeerInterface<M extends Writable> {

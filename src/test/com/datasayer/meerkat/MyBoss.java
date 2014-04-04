@@ -25,8 +25,6 @@ import main.com.datasayer.meerkat.BossMeer;
  * MyBoss.java
  * </pre>
  * 
- * @author : garuda
- * 
  * @param <M> Recieve Message Object Type from Guard
  */
 public class MyBoss<M extends MyKeyValue> extends BossMeer<MyKeyValue> {
