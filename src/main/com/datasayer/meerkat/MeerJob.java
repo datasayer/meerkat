@@ -31,7 +31,11 @@ public class MeerJob extends BSPJob {
     super(conf);
   }
   
-  public void setPollingInterval(long interval) {
+  public void setPollingInterval(long pollingInterval) {
+    
+  }
+  
+  public void setAggregateInterval(long aggregateInterval) {
     
   }
   
@@ -39,7 +43,7 @@ public class MeerJob extends BSPJob {
     
   }
   
-  public <B extends BossMeer<Writable>> void setBossMeer(Class<B> bossmeer) {
+  public <B extends BossMeer<Writable,Writable>> void setBossMeer(Class<B> bossmeer) {
     
   }
 }

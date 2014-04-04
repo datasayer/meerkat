@@ -17,6 +17,10 @@
  */
 package test.com.datasayer.meerkat;
 
+import java.util.Iterator;
+
+import org.apache.hadoop.io.Writable;
+
 import main.com.datasayer.meerkat.BossMeer;
 
 /**
@@ -26,15 +30,15 @@ import main.com.datasayer.meerkat.BossMeer;
  * </pre>
  * 
  * @param <M> Recieve Message Object Type from Guard
+ * @param <R> Report Object for Realtime IPC
  */
-public class MyBoss<M extends MyKeyValue> extends BossMeer<MyKeyValue> {
+public class MyBoss<M extends MyKeyValue, R extends Writable> extends BossMeer<M,R> {
 
   @Override
-  public void compute(MyKeyValue message) {
-    // calculation logic here
-    // print out data calculation ended.
-    // print out is whatever u want local file / System.out / JDBC
-    // it depends your code
+  public R compute(Iterator<M> message) {
+    // Aggregate,Compute Logic here
+    // return Report Object
+    return null;
   }
 
 }

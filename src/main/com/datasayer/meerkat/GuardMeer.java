@@ -27,9 +27,4 @@ public abstract class GuardMeer<M extends Writable> implements GuardMeerInterfac
   protected void setMeerRunner(MeerRunner runner) {
     
   }
-  
-  @Override
-  public void sendMessage(M message) {
-    
-  }
 }

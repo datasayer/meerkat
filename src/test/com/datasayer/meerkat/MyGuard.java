@@ -27,13 +27,14 @@ import main.com.datasayer.meerkat.GuardMeer;
  * 
  * @param <M> Message Object Type to Send Boss
  */
-public class MyGuard<M extends MyKeyValue> extends GuardMeer<MyKeyValue> {
+public class MyGuard<M extends MyKeyValue> extends GuardMeer<M> {
 
   @Override
-  public void compute(String readLine) {
+  public M observe(String readLine) {
     // data parsing here
     // and make message to send boss
     // hey boss! here's my data!! :-)
+    return null;
   }
 
 }

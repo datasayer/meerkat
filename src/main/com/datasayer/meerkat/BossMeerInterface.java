@@ -17,6 +17,8 @@
  */
 package main.com.datasayer.meerkat;
 
+import java.util.Iterator;
+
 import org.apache.hadoop.io.Writable;
 
 /**
@@ -26,8 +28,9 @@ import org.apache.hadoop.io.Writable;
  * </pre>
  * 
  * @param <M> Recieve Message Object Type from Guard
+ * @param <R> Report Object for Write Output and IPC
  */
-public interface BossMeerInterface<M extends Writable> {
+public interface BossMeerInterface<M extends Writable, R extends Writable> {
   /**
    * method : compute
    * description : User Define Function.<br>
@@ -35,5 +38,5 @@ public interface BossMeerInterface<M extends Writable> {
    * @param message<br>
    * Recieve Message Object Type from Guard
    */
-  public void compute(M message);
+  public R compute(Iterator<M> message);
 }

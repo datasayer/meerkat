@@ -31,9 +31,26 @@ public class MeerkatMain {
       HamaConfiguration conf = new HamaConfiguration();
       MeerJob job = new MeerJob(conf);
       job.setNumBspTask(1);
+      /*
+       * set Polling Interval for Tail
+       */
       job.setPollingInterval(5000);
+      
+      /*
+       * set Aggregate Interval for Tail
+       */
+      job.setAggregateInterval(5000);
+      
+      /*
+       * set custom GuardMeer class implemented from GuardMeer
+       */
       job.setGuardMeer(MyGuard.class);
+      
+      /*
+       * set custom BossMeer class implemented from BossMeer
+       */
       job.setBossMeer(MyBoss.class);
+      
       job.waitForCompletion(true);
     } catch (IOException e) {
       e.printStackTrace();
