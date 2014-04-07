@@ -15,23 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package test.com.datasayer.meerkat;
+package com.datasayer.meerkat;
 
 import java.util.Iterator;
 
 import org.apache.hadoop.io.Writable;
 
-import main.com.datasayer.meerkat.BossMeer;
-
-/**
- * <pre>
- * test.com.datasayer.meerkat
- * MyBoss.java
- * </pre>
- * 
- * @param <M> Recieve Message Object Type from Guard
- * @param <R> Report Object for Realtime IPC
- */
 public class MyBoss<M extends MyKeyValue, R extends Writable> extends BossMeer<M,R> {
 
   @Override

@@ -15,9 +15,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package test.com.datasayer.meerkat;
+package com.datasayer.meerkat;
 
-import main.com.datasayer.meerkat.GuardMeer;
+import com.datasayer.meerkat.GuardMeer;
 
 /**
  * <pre>

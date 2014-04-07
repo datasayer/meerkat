@@ -15,28 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package main.com.datasayer.meerkat;
+package com.datasayer.meerkat;
 
 import java.util.Iterator;
 
 import org.apache.hadoop.io.Writable;
 
-/**
- * <pre>
- * main.com.datasayer.meerkat
- * BossMeerInterface.java
- * </pre>
- * 
- * @param <M> Recieve Message Object Type from Guard
- * @param <R> Report Object for Write Output and IPC
- */
 public interface BossMeerInterface<M extends Writable, R extends Writable> {
-  /**
-   * method : compute
-   * description : User Define Function.<br>
-   * Aggregate & Compute Data has Recieved from Guard.
-   * @param message<br>
-   * Recieve Message Object Type from Guard
-   */
+
   public R compute(Iterator<M> message);
 }

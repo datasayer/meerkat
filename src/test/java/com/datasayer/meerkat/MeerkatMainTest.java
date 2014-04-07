@@ -15,15 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package test.com.datasayer.meerkat;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
+package com.datasayer.meerkat;
 
 public class MeerkatMainTest {
 
-  @Test
   public void testMain() {
     MeerkatMain.main(null);
   }

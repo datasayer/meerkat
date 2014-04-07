@@ -15,35 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package main.com.datasayer.meerkat;
+package com.datasayer.meerkat;
 
 import java.io.IOException;
 
-import org.apache.hadoop.io.Writable;
-import org.apache.hama.HamaConfiguration;
-import org.apache.hama.bsp.BSPJob;
-import org.apache.hama.bsp.NullOutputFormat;
+import com.datasayer.meerkat.BossMeer;
 
+public class MeerJob {
 
-public class MeerJob extends BSPJob {
-  
-  public MeerJob(HamaConfiguration conf) throws IOException {
-    super(conf);
+  public MeerJob() throws IOException {
   }
-  
-  public void setPollingInterval(long pollingInterval) {
-    
+
+  public void setBossAggregationInterval(long aggregationInterval) {
+
   }
-  
-  public void setAggregateInterval(long aggregateInterval) {
-    
-  }
-  
-  public <G extends GuardMeer<Writable>> void setGuardMeer(Class<G> guardmeer) {
-    
-  }
-  
-  public <B extends BossMeer<Writable,Writable>> void setBossMeer(Class<B> bossmeer) {
-    
-  }
+
 }

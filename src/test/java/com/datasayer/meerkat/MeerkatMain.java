@@ -15,50 +15,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package test.com.datasayer.meerkat;
+package com.datasayer.meerkat;
 
-import java.io.IOException;
-
-import main.com.datasayer.meerkat.MeerJob;
-
-import org.apache.hama.HamaConfiguration;
 
 public class MeerkatMain {
 
-  @SuppressWarnings("unchecked")
   public static void main(String[] args) {
-    try {
-      HamaConfiguration conf = new HamaConfiguration();
-      MeerJob job = new MeerJob(conf);
-      job.setNumBspTask(1);
-      /*
-       * set Polling Interval for Tail
-       */
-      job.setPollingInterval(5000);
-      
-      /*
-       * set Aggregate Interval for Tail
-       */
-      job.setAggregateInterval(5000);
-      
-      /*
-       * set custom GuardMeer class implemented from GuardMeer
-       */
-      job.setGuardMeer(MyGuard.class);
-      
-      /*
-       * set custom BossMeer class implemented from BossMeer
-       */
-      job.setBossMeer(MyBoss.class);
-      
-      job.waitForCompletion(true);
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
   }
-  
+
 }

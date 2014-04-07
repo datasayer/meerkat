@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package main.com.datasayer.meerkat;
+package com.datasayer.meerkat;
 
 import java.io.IOException;
 

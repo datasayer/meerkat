@@ -15,28 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package main.com.datasayer.meerkat;
+package com.datasayer.meerkat;
 
 import org.apache.hadoop.io.Writable;
 
+public interface GuardMeerInterface<CHAT extends Writable> {
 
-/**
- * <pre>
- * main.com.datasayer.meerkat
- * GuardMeerInterface.java
- * </pre>
- * 
- * @param <M> Message Object Type to Send Boss
- */
-public interface GuardMeerInterface<M extends Writable> {
   /**
-   * method : observe
-   * description : User Define Function.<br>
-   * Recieve String Data from MeerRunner
-   * and Parse Data to Send Message Writable<M> What User Want.
-   * @param readLine<br>
-   * String data has gathered from File or etc..
-   * @return <M> Message Object for send Boss
+   * return the observed results by meerkats.
    */
-  public M observe(String readLine);
+  public CHAT observe(String line);
 }

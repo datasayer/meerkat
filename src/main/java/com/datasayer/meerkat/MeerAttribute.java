@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package main.com.datasayer.meerkat;
+package com.datasayer.meerkat;
 
 public class MeerAttribute {
   public final static String guardMeerUri = "main.com.datasayer.meerkat.GuardMeer";

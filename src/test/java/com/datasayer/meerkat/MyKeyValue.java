@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package test.com.datasayer.meerkat;
+package com.datasayer.meerkat;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -26,7 +26,7 @@ import org.apache.hadoop.io.Writable;
 public class MyKeyValue implements Writable {
   private String key;
   private int value;
-  
+
   public MyKeyValue(String key, int value) {
     this.key = key;
     this.value = value;
@@ -47,12 +47,15 @@ public class MyKeyValue implements Writable {
   public String getKey() {
     return key;
   }
+
   public void setKey(String key) {
     this.key = key;
   }
+
   public int getValue() {
     return value;
   }
+
   public void setValue(int value) {
     this.value = value;
   }
