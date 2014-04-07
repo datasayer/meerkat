@@ -25,21 +25,24 @@ import org.apache.hama.ipc.Server;
 public abstract class MeerReporter<RESULT> implements
     MeerReporterInterface<RESULT> {
 
+  Boolean isReportServerNeeded = true;
   Server reportServer;
 
   public MeerReporter(HamaConfiguration conf) throws Exception {
-    reportServer = RPC.getServer(this, conf
-        .get("com.datasayer.meerkat.communicator.ip"), conf.getInt(
-        "com.datasayer.meerkat.communicator.port", 1234), conf.getInt(
-        "com.datasayer.meerkat.communicator.handler.threads.num", 5), false,
-        conf);
+    if (isReportServerNeeded) {
+      reportServer = RPC.getServer(this, conf
+          .get("com.datasayer.meerkat.communicator.ip"), conf.getInt(
+          "com.datasayer.meerkat.communicator.port", 1234), conf.getInt(
+          "com.datasayer.meerkat.communicator.handler.threads.num", 5), false,
+          conf);
+    }
   }
-  
+
   public Client getClient(HamaConfiguration conf) {
-    //return RPC.getProxy(org.apache.hama.ipc.HamaRPCProtocolVersion, 0.1, conf
-    //    .get("com.datasayer.meerkat.communicator.ip"), conf.getInt(
-    //    "com.datasayer.meerkat.communicator.port", 1234));
-    
+    // return RPC.getProxy(org.apache.hama.ipc.HamaRPCProtocolVersion, 0.1, conf
+    // .get("com.datasayer.meerkat.communicator.ip"), conf.getInt(
+    // "com.datasayer.meerkat.communicator.port", 1234));
+
     return null;
   }
 
