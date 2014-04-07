@@ -6,7 +6,7 @@ Meerkat consists of three major components:
 
  * GuardMeer - The "guard meerkats" are launched directly on the machines that generate the logs. They work as programmed. For example, when "guard meerkats" spot a specific event, they report to the all GuardMeer or BossMeer.
  * BossMeer - The boss of meerkats is usually aggregate the statistics.
- * MeerCommunicator - A Client library for getting real-time reports.
+ * MeerReporter - A real-time result storage. You can create your own storage by implementing MeerReportInterface, e.g., DBReporter, MemcachedReporter, ..., etc.
 
 Future Tasks
 ===============
