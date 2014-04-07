@@ -33,7 +33,7 @@ public class MeerJobRunner extends
 
     // guardMeer.setPeer(peer);
     // guardMeer.observe();
-
+    
   }
 
   @Override
