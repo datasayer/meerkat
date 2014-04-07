@@ -1,0 +1,3 @@
+CHANGES LOG
+
+ISSUE-7: Mavenize the directory and Initial Interface Design for Meerkat (edwardyoon)
