@@ -28,8 +28,8 @@ public class MeerkatMainTest {
   public class ObserverMeers extends GuardMeer<IntWritable> {
 
     @Override
-    public IntWritable observe(String line) {
-      return new IntWritable(line.length());
+    public void observe(String line) {
+      this.sendToBoss(new IntWritable(line.length()));
     }
 
   }

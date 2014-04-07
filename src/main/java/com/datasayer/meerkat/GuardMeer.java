@@ -18,11 +18,21 @@
 package com.datasayer.meerkat;
 
 import org.apache.hadoop.io.Writable;
+import org.apache.hama.bsp.BSPPeer;
 
 public abstract class GuardMeer<V extends Writable> implements
     GuardMeerInterface<V> {
-
-  public void sendToBoss(V value) {
-    
+  
+  BSPPeer peer;
+  
+  protected void setPeer(
+      BSPPeer<Writable, Writable, Writable, Writable, Writable> peer) {
+    this.peer = peer;
   }
+  
+  protected void sendToBoss(V value) {
+    // peer.send(arg0, arg1);
+  }
+  
+  
 }

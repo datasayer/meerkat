@@ -22,7 +22,7 @@ import org.apache.hadoop.io.Writable;
 public interface GuardMeerInterface<V extends Writable> {
 
   /**
-   * return the value of observed result from meerkats.
+   * Observes the lines.
    */
-  public V observe(String line);
+  public void observe(String line);
 }
