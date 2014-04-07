@@ -19,6 +19,7 @@ package com.datasayer.meerkat;
 
 import java.util.Iterator;
 
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hama.HamaConfiguration;
@@ -59,6 +60,7 @@ public class MeerkatMainTest {
     HamaConfiguration conf = new HamaConfiguration();
     MeerJob testJob = new MeerJob(conf);
 
+    testJob.setLogPath(new Path("/var/log/**"));
     testJob.setGuardMeerClass(ObserverMeers.class);
     testJob.setBossMeerClass(FindMaxLength.class);
     testJob.setMeerCommunicator(TextReporter.class);

@@ -19,6 +19,7 @@ package com.datasayer.meerkat;
 
 import java.io.IOException;
 
+import org.apache.hadoop.fs.Path;
 import org.apache.hama.HamaConfiguration;
 import org.apache.hama.bsp.BSPJob;
 
@@ -44,6 +45,16 @@ public class MeerJob extends BSPJob {
   }
 
   public void setMeerCommunicator(Class<?> clazz) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  /**
+   * Sets the path of log directory
+   * 
+   * @param path
+   */
+  public void setLogPath(Path path) {
     // TODO Auto-generated method stub
     
   }
