@@ -17,35 +17,30 @@
  */
 package com.datasayer.meerkat;
 
-import java.io.IOException;
-
 import org.apache.hama.HamaConfiguration;
-import org.apache.hama.bsp.BSPJob;
+import org.apache.hama.ipc.Client;
+import org.apache.hama.ipc.RPC;
+import org.apache.hama.ipc.Server;
 
-public class MeerJob extends BSPJob {
+public abstract class MeerReporter<RESULT> implements
+    MeerReporterInterface<RESULT> {
 
-  public MeerJob(HamaConfiguration conf) throws IOException {
-    super(conf);
+  Server reportServer;
+
+  public MeerReporter(HamaConfiguration conf) throws Exception {
+    reportServer = RPC.getServer(this, conf
+        .get("com.datasayer.meerkat.communicator.ip"), conf.getInt(
+        "com.datasayer.meerkat.communicator.port", 1234), conf.getInt(
+        "com.datasayer.meerkat.communicator.handler.threads.num", 5), false,
+        conf);
   }
-
-  public void setBossAggregationInterval(long aggregationInterval) {
-    this.getConfiguration().setLong(
-        "com.datasayer.meerkat.aggregation.interval", aggregationInterval);
-  }
-
-  public void setGuardMeerClass(Class<?> clazz) {
-    // TODO Auto-generated method stub
+  
+  public Client getClient(HamaConfiguration conf) {
+    //return RPC.getProxy(org.apache.hama.ipc.HamaRPCProtocolVersion, 0.1, conf
+    //    .get("com.datasayer.meerkat.communicator.ip"), conf.getInt(
+    //    "com.datasayer.meerkat.communicator.port", 1234));
     
-  }
-
-  public void setBossMeerClass(Class<?> clazz) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void setMeerCommunicator(Class<?> clazz) {
-    // TODO Auto-generated method stub
-    
+    return null;
   }
 
 }

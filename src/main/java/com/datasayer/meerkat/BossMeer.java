@@ -19,7 +19,7 @@ package com.datasayer.meerkat;
 
 import org.apache.hadoop.io.Writable;
 
-public abstract class BossMeer<M extends Writable, R extends Writable>
-    implements BossMeerInterface<M, R> {
+public abstract class BossMeer<V extends Writable, RESULT extends Writable>
+    implements BossMeerInterface<V, RESULT> {
 
 }

@@ -17,10 +17,61 @@
  */
 package com.datasayer.meerkat;
 
+import java.util.Iterator;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hama.HamaConfiguration;
+
 public class MeerkatMainTest {
 
-  public void testMain() {
-    MeerkatMain.main(null);
+  public class ObserverMeers extends GuardMeer<IntWritable> {
+
+    @Override
+    public IntWritable observe(String line) {
+      return new IntWritable(line.length());
+    }
+
+  }
+
+  public class FindMaxLength extends BossMeer<IntWritable, Text> {
+
+    @Override
+    public void masterCompute(Iterator<IntWritable> values,
+        MeerReporter<Text> reporter) {
+
+      int maxLineLength = 0;
+      while (values.hasNext()) {
+        int currValue = values.next().get();
+        if (maxLineLength < values.next().get()) {
+          maxLineLength = currValue;
+        }
+      }
+
+      reporter.setResult(new Text("Current max length of line is :"
+          + maxLineLength));
+    }
+
+  }
+
+  public void testMain() throws Exception {
+    // Job launcher
+    HamaConfiguration conf = new HamaConfiguration();
+    MeerJob testJob = new MeerJob(conf);
+
+    testJob.setGuardMeerClass(ObserverMeers.class);
+    testJob.setBossMeerClass(FindMaxLength.class);
+    testJob.setMeerCommunicator(TextReporter.class);
+
+    testJob.setBossAggregationInterval(1000);
+    testJob.waitForCompletion(false);
+
+    // Client-side
+    TextReporter client = new TextReporter(conf);
+    while (true) {
+      System.out.println(client.getLatestResult());
+    }
+
   }
 
 }

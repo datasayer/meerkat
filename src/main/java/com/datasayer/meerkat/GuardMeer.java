@@ -17,14 +17,12 @@
  */
 package com.datasayer.meerkat;
 
-import java.io.IOException;
-
 import org.apache.hadoop.io.Writable;
-import org.apache.hama.bsp.sync.SyncException;
 
-public abstract class GuardMeer<M extends Writable> implements GuardMeerInterface<M> {
-  
-  protected void setMeerRunner(MeerRunner runner) {
+public abstract class GuardMeer<V extends Writable> implements
+    GuardMeerInterface<V> {
+
+  public void sendToBoss(V value) {
     
   }
 }

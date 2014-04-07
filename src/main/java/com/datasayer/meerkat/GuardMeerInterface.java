@@ -19,10 +19,10 @@ package com.datasayer.meerkat;
 
 import org.apache.hadoop.io.Writable;
 
-public interface GuardMeerInterface<CHAT extends Writable> {
+public interface GuardMeerInterface<V extends Writable> {
 
   /**
-   * return the observed results by meerkats.
+   * return the value of observed result from meerkats.
    */
-  public CHAT observe(String line);
+  public V observe(String line);
 }

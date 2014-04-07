@@ -17,35 +17,10 @@
  */
 package com.datasayer.meerkat;
 
-import java.io.IOException;
+public interface MeerReporterInterface<RESULT> {
 
-import org.apache.hama.HamaConfiguration;
-import org.apache.hama.bsp.BSPJob;
-
-public class MeerJob extends BSPJob {
-
-  public MeerJob(HamaConfiguration conf) throws IOException {
-    super(conf);
-  }
-
-  public void setBossAggregationInterval(long aggregationInterval) {
-    this.getConfiguration().setLong(
-        "com.datasayer.meerkat.aggregation.interval", aggregationInterval);
-  }
-
-  public void setGuardMeerClass(Class<?> clazz) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void setBossMeerClass(Class<?> clazz) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void setMeerCommunicator(Class<?> clazz) {
-    // TODO Auto-generated method stub
-    
-  }
-
+  public void setResult(RESULT result);
+  
+  public RESULT getLatestResult();
+  
 }
