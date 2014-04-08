@@ -3,9 +3,9 @@ package com.datasayer.meerkat;
 import org.apache.hadoop.io.Text;
 import org.apache.hama.HamaConfiguration;
 
-public class TextReporter extends SignalMeer<Text> {
+public class TextSignalMeer extends SignalMeer<Text> {
 
-  public TextReporter(HamaConfiguration conf) throws Exception {
+  public TextSignalMeer(HamaConfiguration conf) throws Exception {
     super(conf);
   }
 

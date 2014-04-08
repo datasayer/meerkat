@@ -63,13 +63,13 @@ public class MeerkatMainTest {
     testJob.setLogPath(new Path("/var/log/**"));
     testJob.setGuardMeerClass(ObserverMeers.class);
     testJob.setBossMeerClass(FindMaxLength.class);
-    testJob.setMeerCommunicator(TextReporter.class);
+    testJob.setMeerCommunicator(TextSignalMeer.class);
 
     testJob.setBossAggregationInterval(1000);
     testJob.waitForCompletion(false);
 
     // Client-side
-    TextReporter client = new TextReporter(conf);
+    TextSignalMeer client = new TextSignalMeer(conf);
     while (true) {
       System.out.println(client.getLatestResult());
     }
