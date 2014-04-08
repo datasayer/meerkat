@@ -17,6 +17,7 @@
  */
 package com.datasayer.meerkat;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import org.apache.hadoop.fs.Path;
@@ -25,55 +26,66 @@ import org.apache.hadoop.io.Text;
 import org.apache.hama.HamaConfiguration;
 
 public class MeerkatMainTest {
+  public MeerkatMainTest() {
+    
+  }
 
-  public class ObserverMeers extends GuardMeer<IntWritable> {
+  public static class ObserverMeers extends GuardMeer<IntWritable> {
 
     @Override
     public void observe(String line) {
-      this.sendToBoss(new IntWritable(line.length()));
+      try {
+        this.sendToBoss(new IntWritable(line.length()));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
 
   }
 
-  public class FindMaxLength extends BossMeer<IntWritable, Text> {
-
+  public static class FindMaxLength extends BossMeer<IntWritable, Text> {
+    private int maxLineLength = 0;
+    
     @Override
     public void masterCompute(Iterator<IntWritable> values,
-        SignalMeer<Text> reporter) {
+        SignalMeer<Text> signalMeer) {
 
-      int maxLineLength = 0;
       while (values.hasNext()) {
         int currValue = values.next().get();
-        if (maxLineLength < values.next().get()) {
+        if (maxLineLength < currValue) {
           maxLineLength = currValue;
         }
       }
+      System.out.println("find max : " + maxLineLength);
 
-      reporter.setResult(new Text("Current max length of line is :"
+      signalMeer.setResult(new Text("Current max length of line is :"
           + maxLineLength));
     }
 
   }
 
-  public void testMain() throws Exception {
+  public static void main(String[] args) throws Exception {
     // Job launcher
     HamaConfiguration conf = new HamaConfiguration();
     MeerJob testJob = new MeerJob(conf);
 
-    testJob.setLogPath(new Path("/var/log/**"));
+    testJob.setLogPath(new Path("src/test/resources/catalina.log"));
     testJob.setGuardMeerClass(ObserverMeers.class);
     testJob.setBossMeerClass(FindMaxLength.class);
-    testJob.setMeerCommunicator(TextSignalMeer.class);
+    testJob.setSignalMeerClass(TextSignalMeer.class);
 
     testJob.setBossAggregationInterval(1000);
+    testJob.setNumBspTask(1);
+    testJob.setSignalServer(true);
     testJob.waitForCompletion(false);
 
     // Client-side
+    /*
     TextSignalMeer client = new TextSignalMeer(conf);
     while (true) {
       System.out.println(client.getLatestResult());
     }
-
+    */
   }
 
 }

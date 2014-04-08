@@ -17,6 +17,8 @@
  */
 package com.datasayer.meerkat;
 
+import java.io.IOException;
+
 import org.apache.hama.HamaConfiguration;
 import org.apache.hama.ipc.Client;
 import org.apache.hama.ipc.RPC;
@@ -25,16 +27,27 @@ import org.apache.hama.ipc.Server;
 public abstract class SignalMeer<RESULT> implements
     SignalMeerInterface<RESULT> {
 
-  Boolean isReportServerNeeded = true;
-  Server reportServer;
+  private boolean isSignalServerNeed = false;
+  private HamaConfiguration conf;
+  private Server signalServer;
 
   public SignalMeer(HamaConfiguration conf) throws Exception {
-    if (isReportServerNeeded) {
-      reportServer = RPC.getServer(this, conf
-          .get("com.datasayer.meerkat.communicator.ip"), conf.getInt(
-          "com.datasayer.meerkat.communicator.port", 1234), conf.getInt(
-          "com.datasayer.meerkat.communicator.handler.threads.num", 5), false,
-          conf);
+    this.conf = conf;
+  }
+  
+  protected void setServer(boolean isSignalServerNeed) throws IOException {
+    this.isSignalServerNeed = isSignalServerNeed;
+    if (isSignalServerNeed) {
+      
+      signalServer = RPC.getServer(
+          this
+          , conf.get(MeerkatConstants.SIGNAL_HOSTNAME_URI)
+          , conf.getInt(MeerkatConstants.SIGNAL_PORT_URI, MeerkatConstants.SIGNAL_PORT)
+          , conf.getInt(MeerkatConstants.SIGNAL_THREAD_COUNT_URI, MeerkatConstants.SIGNAL_THREAD_COUNT)
+          , false
+          , conf);
+      signalServer.start();
+      
     }
   }
 

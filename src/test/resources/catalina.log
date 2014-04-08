@@ -1,0 +1,44 @@
+Mar 18, 2014 10:48:10 AM org.apache.catalina.core.AprLifecycleListener init
+INFO: The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: /usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib
+Mar 18, 2014 10:48:11 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["http-bio-8080"]
+Mar 18, 2014 10:48:11 AM org.apache.coyote.AbstractProtocol init
+INFO: Initializing ProtocolHandler ["ajp-bio-8009"]
+Mar 18, 2014 10:48:11 AM org.apache.catalina.startup.Catalina load
+INFO: Initialization processed in 1006 ms
+Mar 18, 2014 10:48:11 AM org.apache.catalina.core.StandardService startInternal
+INFO: Starting service Catalina
+Mar 18, 2014 10:48:11 AM org.apache.catalina.core.StandardEngine startInternal
+INFO: Starting Servlet Engine: Apache Tomcat/7.0.52
+Mar 18, 2014 10:48:11 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /usr/local/apache/apache-tomcat-7.0.52/webapps/docs
+Mar 18, 2014 10:48:12 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /usr/local/apache/apache-tomcat-7.0.52/webapps/manager
+Mar 18, 2014 10:48:12 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /usr/local/apache/apache-tomcat-7.0.52/webapps/host-manager
+Mar 18, 2014 10:48:12 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /usr/local/apache/apache-tomcat-7.0.52/webapps/examples
+Mar 18, 2014 10:48:12 AM org.apache.catalina.startup.HostConfig deployDirectory
+INFO: Deploying web application directory /usr/local/apache/apache-tomcat-7.0.52/webapps/ROOT
+Mar 18, 2014 10:48:13 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-bio-8080"]
+Mar 18, 2014 10:48:13 AM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["ajp-bio-8009"]
+Mar 18, 2014 10:48:13 AM org.apache.catalina.startup.Catalina start
+INFO: Server startup in 1609 ms
+Mar 18, 2014 10:52:09 AM org.apache.catalina.core.StandardServer await
+INFO: A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+Mar 18, 2014 10:52:09 AM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler ["http-bio-8080"]
+Mar 18, 2014 10:52:09 AM org.apache.coyote.AbstractProtocol pause
+INFO: Pausing ProtocolHandler ["ajp-bio-8009"]
+Mar 18, 2014 10:52:09 AM org.apache.catalina.core.StandardService stopInternal
+INFO: Stopping service Catalina
+Mar 18, 2014 10:52:09 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["http-bio-8080"]
+Mar 18, 2014 10:52:09 AM org.apache.coyote.AbstractProtocol stop
+INFO: Stopping ProtocolHandler ["ajp-bio-8009"]
+Mar 18, 2014 10:52:09 AM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["http-bio-8080"]
+Mar 18, 2014 10:52:09 AM org.apache.coyote.AbstractProtocol destroy
+INFO: Destroying ProtocolHandler ["ajp-bio-8009"]

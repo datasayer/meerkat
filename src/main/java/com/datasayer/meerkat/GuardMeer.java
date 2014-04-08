@@ -17,24 +17,23 @@
  */
 package com.datasayer.meerkat;
 
+import java.io.IOException;
+
 import org.apache.hadoop.io.Writable;
-import org.apache.hama.bsp.BSPPeer;
 
 public abstract class GuardMeer<V extends Writable> implements
     GuardMeerInterface<V> {
   
-  private BSPPeer peer;
-  private int masterIndex = 0;
+  private String masterName = "";
+  private transient MeerJobRunner runner;
   
-  protected void setPeer(
-      BSPPeer<Writable, Writable, Writable, Writable, Writable> peer, int masterIndex) {
-    this.peer = peer;
-    this.masterIndex = masterIndex;
+  protected void setRunner(MeerJobRunner runner) {
+    this.runner = runner;
+    this.masterName = this.runner.getMasterName();
   }
   
-  protected void sendToBoss(V value) {
-    // peer.send(arg0, arg1);
+  protected void sendToBoss(V value) throws IOException {
+    runner.getPeer().send(this.masterName, value);
   }
-  
   
 }

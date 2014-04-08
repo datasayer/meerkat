@@ -20,49 +20,62 @@ package com.datasayer.meerkat;
 import java.io.IOException;
 
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Writable;
+import org.apache.hama.bsp.NullOutputFormat;
 import org.apache.hama.HamaConfiguration;
 import org.apache.hama.bsp.BSPJob;
 
 
 public class MeerJob extends BSPJob {
-  private long aggregationInterval = MeerkatCommon.AGGREGATION_INTERVAL;
-  private long pollingInterval = MeerkatCommon.POLLING_INTERVAL;
-  private Class<? extends GuardMeer> guardMeer;
-  private Class<? extends BossMeer> bossMeer;
-  private Class<? extends SignalMeer> reportMeer;
+  private long aggregationInterval = MeerkatConstants.AGGREGATION_INTERVAL;
+  private long pollingInterval = MeerkatConstants.POLLING_INTERVAL;
+  private Class<? extends GuardMeer<? extends Writable>> guardMeer;
+  private Class<? extends BossMeer<? extends Writable, ? extends Writable>> bossMeer;
+  private Class<? extends SignalMeer<? extends Writable>> signalMeer;
   private Path logPath;
+  private boolean isSignalServerNeed = MeerkatConstants.IS_SIGNAL_SERVER_SETUP;
   
 
   public MeerJob(HamaConfiguration conf) throws IOException {
     super(conf);
+    this.setOutputFormat(NullOutputFormat.class);
     this.setBspClass(MeerJobRunner.class);
+    
+    this.conf.set(MeerkatConstants.SIGNAL_HOSTNAME_URI,MeerkatConstants.SIGNAL_HOSTNAME);
+    this.conf.setInt(MeerkatConstants.SIGNAL_PORT_URI,MeerkatConstants.SIGNAL_PORT);
+    this.conf.setInt(MeerkatConstants.SIGNAL_THREAD_COUNT_URI,MeerkatConstants.SIGNAL_THREAD_COUNT);
   }
 
   public void setPollingInterval(long pollingInterval) {
     this.pollingInterval = pollingInterval;
     this.getConfiguration().setLong(
-        MeerkatCommon.POLLING_INTERVAL_URI, this.pollingInterval);
+        MeerkatConstants.POLLING_INTERVAL_URI, this.pollingInterval);
   }
   
   public void setBossAggregationInterval(long aggregationInterval) {
     this.aggregationInterval = aggregationInterval;
     this.getConfiguration().setLong(
-        MeerkatCommon.AGGREGATION_INTERVAL_URI, this.aggregationInterval);
+        MeerkatConstants.AGGREGATION_INTERVAL_URI, this.aggregationInterval);
   }
 
-  public <G extends GuardMeer> void setGuardMeerClass(Class<G> guardMeer) {
+  public <G extends GuardMeer<? extends Writable>> void setGuardMeerClass(Class<G> guardMeer) {
     this.guardMeer = guardMeer;
-    this.conf.setClass(MeerkatCommon.GUARDMEER_CLASS_URI, GuardMeer.class, GuardMeerInterface.class);
+    this.conf.setClass(MeerkatConstants.GUARDMEER_CLASS_URI, this.guardMeer, GuardMeerInterface.class);
   }
 
-  public <B extends BossMeer> void setBossMeerClass(Class<B> bossMeer) {
+  public <B extends BossMeer<? extends Writable, ? extends Writable>> void setBossMeerClass(Class<B> bossMeer) {
     this.bossMeer = bossMeer;
-    this.conf.setClass(MeerkatCommon.BOSSMEER_CLASS_URI, BossMeer.class, BossMeerInterface.class);
+    this.conf.setClass(MeerkatConstants.BOSSMEER_CLASS_URI, this.bossMeer, BossMeerInterface.class);
   }
 
-  public <R extends SignalMeer> void setMeerCommunicator(Class<R> reportMeer) {
-    this.reportMeer = reportMeer;
-    this.conf.setClass(MeerkatCommon.REPORTMEER_CLASS_URI, SignalMeer.class, SignalMeerInterface.class);
+  public <R extends SignalMeer<? extends Writable>> void setSignalMeerClass(Class<R> signalMeer) {
+    this.signalMeer = signalMeer;
+    this.conf.setClass(MeerkatConstants.SIGNALMEER_CLASS_URI, this.signalMeer, SignalMeerInterface.class);
+  }
+  
+  public void setSignalServer(boolean isSignalServerNeed) {
+    this.isSignalServerNeed = isSignalServerNeed;
+    this.conf.setBoolean(MeerkatConstants.SIGNAL_SERVER_SETUP_URI, this.isSignalServerNeed);
   }
 
   /**
@@ -72,7 +85,7 @@ public class MeerJob extends BSPJob {
    */
   public void setLogPath(Path logPath) {
     this.logPath = logPath;
-    this.conf.set(MeerkatCommon.LOG_PATH_URI, this.logPath.toString());
+    this.conf.set(MeerkatConstants.LOG_PATH_URI, this.logPath.toString());
   }
 
 }
