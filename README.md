@@ -11,7 +11,8 @@ Meerkat consists of three major components:
 Future Tasks
 ===============
 
- * The current design requires the installation of Apache Hama on the every machines. To reduce the load of machines (that generate logs), we might want to add agent tier in the future.
+ * The current design requires the installation of Apache Hama on the every machines. This might be helpful for Fault Tolerance system in the future.
+ * We might want to add something like a chain of bolts of Storm.
 
 License
 ===============
