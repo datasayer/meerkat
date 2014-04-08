@@ -23,11 +23,13 @@ import org.apache.hama.bsp.BSPPeer;
 public abstract class GuardMeer<V extends Writable> implements
     GuardMeerInterface<V> {
   
-  BSPPeer peer;
+  private BSPPeer peer;
+  private int masterIndex = 0;
   
   protected void setPeer(
-      BSPPeer<Writable, Writable, Writable, Writable, Writable> peer) {
+      BSPPeer<Writable, Writable, Writable, Writable, Writable> peer, int masterIndex) {
     this.peer = peer;
+    this.masterIndex = masterIndex;
   }
   
   protected void sendToBoss(V value) {

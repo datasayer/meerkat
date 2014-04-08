@@ -23,30 +23,46 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hama.HamaConfiguration;
 import org.apache.hama.bsp.BSPJob;
 
+
 public class MeerJob extends BSPJob {
+  private long aggregationInterval = MeerkatCommon.AGGREGATION_INTERVAL;
+  private long pollingInterval = MeerkatCommon.POLLING_INTERVAL;
+  private Class<? extends GuardMeer> guardMeer;
+  private Class<? extends BossMeer> bossMeer;
+  private Class<? extends MeerReporter> reportMeer;
+  private Path logPath;
+  
 
   public MeerJob(HamaConfiguration conf) throws IOException {
     super(conf);
+    this.setBspClass(MeerJobRunner.class);
   }
 
-  public void setBossAggregationInterval(long aggregationInterval) {
+  public void setPollingInterval(long pollingInterval) {
+    this.pollingInterval = pollingInterval;
     this.getConfiguration().setLong(
-        "com.datasayer.meerkat.aggregation.interval", aggregationInterval);
+        MeerkatCommon.POLLING_INTERVAL_URI, this.pollingInterval);
+  }
+  
+  public void setBossAggregationInterval(long aggregationInterval) {
+    this.aggregationInterval = aggregationInterval;
+    this.getConfiguration().setLong(
+        MeerkatCommon.AGGREGATION_INTERVAL_URI, this.aggregationInterval);
   }
 
-  public void setGuardMeerClass(Class<?> clazz) {
-    // TODO Auto-generated method stub
-    
+  public <G extends GuardMeer> void setGuardMeerClass(Class<G> guardMeer) {
+    this.guardMeer = guardMeer;
+    this.conf.setClass(MeerkatCommon.GUARDMEER_CLASS_URI, GuardMeer.class, GuardMeerInterface.class);
   }
 
-  public void setBossMeerClass(Class<?> clazz) {
-    // TODO Auto-generated method stub
-    
+  public <B extends BossMeer> void setBossMeerClass(Class<B> bossMeer) {
+    this.bossMeer = bossMeer;
+    this.conf.setClass(MeerkatCommon.BOSSMEER_CLASS_URI, BossMeer.class, BossMeerInterface.class);
   }
 
-  public void setMeerCommunicator(Class<?> clazz) {
-    // TODO Auto-generated method stub
-    
+  public <R extends MeerReporter> void setMeerCommunicator(Class<R> reportMeer) {
+    this.reportMeer = reportMeer;
+    this.conf.setClass(MeerkatCommon.REPORTMEER_CLASS_URI, MeerReporter.class, MeerReporterInterface.class);
   }
 
   /**
@@ -54,9 +70,9 @@ public class MeerJob extends BSPJob {
    * 
    * @param path
    */
-  public void setLogPath(Path path) {
-    // TODO Auto-generated method stub
-    
+  public void setLogPath(Path logPath) {
+    this.logPath = logPath;
+    this.conf.set(MeerkatCommon.LOG_PATH_URI, this.logPath.toString());
   }
 
 }
