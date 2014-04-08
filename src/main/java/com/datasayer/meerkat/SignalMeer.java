@@ -22,13 +22,13 @@ import org.apache.hama.ipc.Client;
 import org.apache.hama.ipc.RPC;
 import org.apache.hama.ipc.Server;
 
-public abstract class MeerReporter<RESULT> implements
-    MeerReporterInterface<RESULT> {
+public abstract class SignalMeer<RESULT> implements
+    SignalMeerInterface<RESULT> {
 
   Boolean isReportServerNeeded = true;
   Server reportServer;
 
-  public MeerReporter(HamaConfiguration conf) throws Exception {
+  public SignalMeer(HamaConfiguration conf) throws Exception {
     if (isReportServerNeeded) {
       reportServer = RPC.getServer(this, conf
           .get("com.datasayer.meerkat.communicator.ip"), conf.getInt(

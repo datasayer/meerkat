@@ -39,7 +39,7 @@ public class MeerkatMainTest {
 
     @Override
     public void masterCompute(Iterator<IntWritable> values,
-        MeerReporter<Text> reporter) {
+        SignalMeer<Text> reporter) {
 
       int maxLineLength = 0;
       while (values.hasNext()) {

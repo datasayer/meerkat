@@ -29,7 +29,7 @@ public class MeerJob extends BSPJob {
   private long pollingInterval = MeerkatCommon.POLLING_INTERVAL;
   private Class<? extends GuardMeer> guardMeer;
   private Class<? extends BossMeer> bossMeer;
-  private Class<? extends MeerReporter> reportMeer;
+  private Class<? extends SignalMeer> reportMeer;
   private Path logPath;
   
 
@@ -60,9 +60,9 @@ public class MeerJob extends BSPJob {
     this.conf.setClass(MeerkatCommon.BOSSMEER_CLASS_URI, BossMeer.class, BossMeerInterface.class);
   }
 
-  public <R extends MeerReporter> void setMeerCommunicator(Class<R> reportMeer) {
+  public <R extends SignalMeer> void setMeerCommunicator(Class<R> reportMeer) {
     this.reportMeer = reportMeer;
-    this.conf.setClass(MeerkatCommon.REPORTMEER_CLASS_URI, MeerReporter.class, MeerReporterInterface.class);
+    this.conf.setClass(MeerkatCommon.REPORTMEER_CLASS_URI, SignalMeer.class, SignalMeerInterface.class);
   }
 
   /**

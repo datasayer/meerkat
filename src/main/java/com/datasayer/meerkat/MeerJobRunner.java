@@ -35,7 +35,7 @@ public class MeerJobRunner extends
   private long pollingInterval = MeerkatCommon.POLLING_INTERVAL;
   private GuardMeerInterface guardMeer;
   private BossMeerInterface bossMeer;
-  private MeerReporterInterface reportMeer;
+  private SignalMeerInterface reportMeer;
   private Path logPath;
   private int masterIndex = 0;
   private BSPPeer<Writable, Writable, Writable, Writable, Writable> peer;
@@ -67,7 +67,7 @@ public class MeerJobRunner extends
     Class<? extends BossMeerInterface> bossClass = conf.getClass(MeerkatCommon.BOSSMEER_CLASS_URI, BossMeer.class, BossMeerInterface.class);
     bossMeer = ReflectionUtils.newInstance(bossClass);
     
-    Class<? extends MeerReporterInterface> reportClass = conf.getClass(MeerkatCommon.REPORTMEER_CLASS_URI, MeerReporter.class, MeerReporterInterface.class);
+    Class<? extends SignalMeerInterface> reportClass = conf.getClass(MeerkatCommon.REPORTMEER_CLASS_URI, SignalMeer.class, SignalMeerInterface.class);
     reportMeer = ReflectionUtils.newInstance(reportClass);
   }
 

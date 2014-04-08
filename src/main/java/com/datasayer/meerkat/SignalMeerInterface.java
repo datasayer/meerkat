@@ -17,7 +17,7 @@
  */
 package com.datasayer.meerkat;
 
-public interface MeerReporterInterface<RESULT> {
+public interface SignalMeerInterface<RESULT> {
 
   public void setResult(RESULT result);
   
