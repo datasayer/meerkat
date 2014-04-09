@@ -81,32 +81,12 @@ public class MeerJobRunner extends
           peer.sync();
           
           if (peer.getPeerName().equals(masterName)) {
-            bossMeer.masterCompute(new Iterator() {
-              int numOfElements = peer.getNumCurrentMessages();
-              int consumedElements = 0;
-
-              @Override
-              public boolean hasNext() {
-                return (numOfElements > consumedElements) ? true : false;
-              }
-
-              @Override
-              public Writable next() {
-                try {
-                  consumedElements++;
-                  return peer.getCurrentMessage();
-                } catch (IOException e) {
-                  // TODO Auto-generated catch block
-                  e.printStackTrace();
-                }
-                return null;
-              }
-
-              @Override
-              public void remove() {
-
-              }
-            }, signalMeer);
+            MessageIterator iterator = new MessageIterator();
+            Writable tmpMessage;
+            while((tmpMessage = peer.getCurrentMessage()) != null) {
+              iterator.add(tmpMessage);
+            }
+            bossMeer.masterCompute(iterator, signalMeer);
             this.lastAggregatedTime = currentTime;
           }
         }
