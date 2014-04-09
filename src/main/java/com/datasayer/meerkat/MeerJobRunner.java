@@ -20,6 +20,7 @@ package com.datasayer.meerkat;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -45,6 +46,7 @@ public class MeerJobRunner extends
   private boolean isSignalServerNeed = MeerkatConstants.IS_SIGNAL_SERVER_SETUP;
   private long lastAggregatedTime = 0L;
 
+  @SuppressWarnings("unchecked")
   @Override
   public void bsp(
       final BSPPeer<Writable, Writable, Writable, Writable, Writable> peer)
@@ -77,16 +79,42 @@ public class MeerJobRunner extends
 
         long timeDiff = currentTime - this.lastAggregatedTime;
         if (timeDiff >= this.aggregationInterval) {
-          
+
           peer.sync();
-          
+
           if (peer.getPeerName().equals(masterName)) {
-            MessageIterator iterator = new MessageIterator();
-            Writable tmpMessage;
-            while((tmpMessage = peer.getCurrentMessage()) != null) {
-              iterator.add(tmpMessage);
-            }
-            bossMeer.masterCompute(iterator, signalMeer);
+            bossMeer.masterCompute(new Iterator<Writable>() {
+
+              private final int producedMessages = peer.getNumCurrentMessages();
+              private int consumedMessages = 0;
+
+              @Override
+              public boolean hasNext() {
+                return producedMessages > consumedMessages;
+              }
+
+              @Override
+              public Writable next() throws NoSuchElementException {
+                if (consumedMessages >= producedMessages) {
+                  throw new NoSuchElementException();
+                }
+
+                try {
+                  consumedMessages++;
+                  return peer.getCurrentMessage();
+                } catch (IOException e) {
+                  throw new NoSuchElementException();
+                }
+              }
+
+              @Override
+              public void remove() {
+                // BSPPeer.getCurrentMessage originally deletes a message.
+                // Thus, it doesn't need to throw exception.
+                // throw new UnsupportedOperationException();
+              }
+
+            }, signalMeer);
             this.lastAggregatedTime = currentTime;
           }
         }
