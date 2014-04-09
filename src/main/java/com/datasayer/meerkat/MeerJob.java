@@ -25,57 +25,60 @@ import org.apache.hama.bsp.NullOutputFormat;
 import org.apache.hama.HamaConfiguration;
 import org.apache.hama.bsp.BSPJob;
 
-
 public class MeerJob extends BSPJob {
+  // For Default Value Check
   private long aggregationInterval = MeerkatConstants.AGGREGATION_INTERVAL;
-  private long pollingInterval = MeerkatConstants.POLLING_INTERVAL;
   private Class<? extends GuardMeer<? extends Writable>> guardMeer;
   private Class<? extends BossMeer<? extends Writable, ? extends Writable>> bossMeer;
   private Class<? extends SignalMeer<? extends Writable>> signalMeer;
   private Path logPath;
   private boolean isSignalServerNeed = MeerkatConstants.IS_SIGNAL_SERVER_SETUP;
-  
+  // For Default Value Check
 
   public MeerJob(HamaConfiguration conf) throws IOException {
     super(conf);
     this.setOutputFormat(NullOutputFormat.class);
     this.setBspClass(MeerJobRunner.class);
-    
-    this.conf.set(MeerkatConstants.SIGNAL_HOSTNAME_URI,MeerkatConstants.SIGNAL_HOSTNAME);
-    this.conf.setInt(MeerkatConstants.SIGNAL_PORT_URI,MeerkatConstants.SIGNAL_PORT);
-    this.conf.setInt(MeerkatConstants.SIGNAL_THREAD_COUNT_URI,MeerkatConstants.SIGNAL_THREAD_COUNT);
+
+    this.conf.set(MeerkatConstants.SIGNAL_HOSTNAME_URI,
+        MeerkatConstants.SIGNAL_HOSTNAME);
+    this.conf.setInt(MeerkatConstants.SIGNAL_PORT_URI,
+        MeerkatConstants.SIGNAL_PORT);
+    this.conf.setInt(MeerkatConstants.SIGNAL_THREAD_COUNT_URI,
+        MeerkatConstants.SIGNAL_THREAD_COUNT);
   }
 
-  public void setPollingInterval(long pollingInterval) {
-    this.pollingInterval = pollingInterval;
-    this.getConfiguration().setLong(
-        MeerkatConstants.POLLING_INTERVAL_URI, this.pollingInterval);
-  }
-  
   public void setBossAggregationInterval(long aggregationInterval) {
     this.aggregationInterval = aggregationInterval;
-    this.getConfiguration().setLong(
-        MeerkatConstants.AGGREGATION_INTERVAL_URI, this.aggregationInterval);
+    this.getConfiguration().setLong(MeerkatConstants.AGGREGATION_INTERVAL_URI,
+        this.aggregationInterval);
   }
 
-  public <G extends GuardMeer<? extends Writable>> void setGuardMeerClass(Class<G> guardMeer) {
+  public <G extends GuardMeer<? extends Writable>> void setGuardMeerClass(
+      Class<G> guardMeer) {
     this.guardMeer = guardMeer;
-    this.conf.setClass(MeerkatConstants.GUARDMEER_CLASS_URI, this.guardMeer, GuardMeerInterface.class);
+    this.conf.setClass(MeerkatConstants.GUARDMEER_CLASS_URI, this.guardMeer,
+        GuardMeerInterface.class);
   }
 
-  public <B extends BossMeer<? extends Writable, ? extends Writable>> void setBossMeerClass(Class<B> bossMeer) {
+  public <B extends BossMeer<? extends Writable, ? extends Writable>> void setBossMeerClass(
+      Class<B> bossMeer) {
     this.bossMeer = bossMeer;
-    this.conf.setClass(MeerkatConstants.BOSSMEER_CLASS_URI, this.bossMeer, BossMeerInterface.class);
+    this.conf.setClass(MeerkatConstants.BOSSMEER_CLASS_URI, this.bossMeer,
+        BossMeerInterface.class);
   }
 
-  public <R extends SignalMeer<? extends Writable>> void setSignalMeerClass(Class<R> signalMeer) {
+  public <R extends SignalMeer<? extends Writable>> void setSignalMeerClass(
+      Class<R> signalMeer) {
     this.signalMeer = signalMeer;
-    this.conf.setClass(MeerkatConstants.SIGNALMEER_CLASS_URI, this.signalMeer, SignalMeerInterface.class);
+    this.conf.setClass(MeerkatConstants.SIGNALMEER_CLASS_URI, this.signalMeer,
+        SignalMeerInterface.class);
   }
-  
+
   public void setSignalServer(boolean isSignalServerNeed) {
     this.isSignalServerNeed = isSignalServerNeed;
-    this.conf.setBoolean(MeerkatConstants.SIGNAL_SERVER_SETUP_URI, this.isSignalServerNeed);
+    this.conf.setBoolean(MeerkatConstants.SIGNAL_SERVER_SETUP_URI,
+        this.isSignalServerNeed);
   }
 
   /**
@@ -87,5 +90,11 @@ public class MeerJob extends BSPJob {
     this.logPath = logPath;
     this.conf.set(MeerkatConstants.LOG_PATH_URI, this.logPath.toString());
   }
-
+  
+  /*
+  @Override
+  public void submit() {
+    // default values check is here?
+  }
+  */
 }

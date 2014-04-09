@@ -19,6 +19,7 @@ package com.datasayer.meerkat;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Iterator;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -29,12 +30,10 @@ import org.apache.hama.bsp.BSPPeer;
 import org.apache.hama.bsp.sync.SyncException;
 import org.apache.hama.util.ReflectionUtils;
 
-
 public class MeerJobRunner extends
     BSP<Writable, Writable, Writable, Writable, Writable> {
   private HamaConfiguration conf;
   private long aggregationInterval = MeerkatConstants.AGGREGATION_INTERVAL;
-  private long pollingInterval = MeerkatConstants.POLLING_INTERVAL;
   private GuardMeer guardMeer;
   private BossMeer bossMeer;
   private SignalMeer signalMeer;
@@ -44,80 +43,77 @@ public class MeerJobRunner extends
   private BSPPeer<Writable, Writable, Writable, Writable, Writable> peer;
   private long filePointer = 0;
   private boolean isSignalServerNeed = MeerkatConstants.IS_SIGNAL_SERVER_SETUP;
+  private long lastAggregatedTime = 0L;
 
   @Override
-  public void bsp(final BSPPeer<Writable, Writable, Writable, Writable, Writable> peer)
+  public void bsp(
+      final BSPPeer<Writable, Writable, Writable, Writable, Writable> peer)
       throws IOException, SyncException, InterruptedException {
-    tail();
-    aggregate(peer);
-  }
 
-  private void tail() {
-    new Thread(new Runnable(){
-      @Override
-      public void run() {
-        while(true) {
-          try {
-            FileSystem fs = FileSystem.get(conf);
-            if(!fs.isFile(logPath)){
-              System.out.println("can not read input file");
-              return;
-            }
-            RandomAccessFile file = new RandomAccessFile(logPath.toString(), "r");
-            long fileLength = file.length();
-            
-            if (fileLength > filePointer) {
-              file.seek(filePointer);
-              String line = null;
-              while (file.length() > file.getFilePointer()) {
-                line = file.readLine();
-                line = new String(line.getBytes("8859_1"), "utf-8");
-                guardMeer.observe(line);
+    while (true) {
+      try {
+        long currentTime = System.currentTimeMillis();
+        FileSystem fs = FileSystem.get(conf);
+        if (!fs.isFile(logPath)) {
+          System.out.println("can not read input file");
+          return;
+        }
+        RandomAccessFile file = new RandomAccessFile(logPath.toString(), "r");
+        long fileLength = file.length();
+
+        if (fileLength > filePointer) {
+          file.seek(filePointer);
+          String line = null;
+          while (file.length() > file.getFilePointer()) {
+            line = file.readLine();
+            line = new String(line.getBytes("8859_1"), "utf-8");
+            guardMeer.observe(line);
+          }
+          filePointer = file.getFilePointer();
+        } else {
+          // nothing to do
+        }
+        file.close();
+
+        long timeDiff = currentTime - this.lastAggregatedTime;
+        if (timeDiff >= this.aggregationInterval) {
+          
+          peer.sync();
+          
+          if (peer.getPeerName().equals(masterName)) {
+            bossMeer.masterCompute(new Iterator() {
+              int numOfElements = peer.getNumCurrentMessages();
+              int consumedElements = 0;
+
+              @Override
+              public boolean hasNext() {
+                return (numOfElements > consumedElements) ? true : false;
               }
-              filePointer = file.getFilePointer();
-            }else{
-              // nothing to do
-            }
-            file.close();
-          } catch (IOException e) {
-            e.printStackTrace();
+
+              @Override
+              public Writable next() {
+                try {
+                  consumedElements++;
+                  return peer.getCurrentMessage();
+                } catch (IOException e) {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
+                }
+                return null;
+              }
+
+              @Override
+              public void remove() {
+
+              }
+            }, signalMeer);
+            this.lastAggregatedTime = currentTime;
           }
         }
+      } catch (IOException e) {
+        e.printStackTrace();
       }
-    }).start();
-  }
-  
-  private void aggregate(final BSPPeer<Writable, Writable, Writable, Writable, Writable> peer) {
-    new Runnable(){
-      BSPPeer<Writable, Writable, Writable, Writable, Writable> innerPeer;
-      @Override
-      public void run() {
-        while(true) {
-          try {
-            Thread.sleep(aggregationInterval);
-            if (peer.getPeerName().equals(masterName)) {
-              peer.sync();
-              MessageIterator iterator = new MessageIterator();
-              Writable msg;
-              while( (msg = peer.getCurrentMessage()) != null) {
-                iterator.add(msg);
-              }
-              bossMeer.masterCompute(iterator, signalMeer);
-            }
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          } catch (IOException e) {
-            e.printStackTrace();
-          } catch (SyncException e) {
-            e.printStackTrace();
-          }
-        }
-      }
-      public Runnable init(BSPPeer<Writable, Writable, Writable, Writable, Writable> innerPeer) {
-        this.innerPeer = innerPeer;
-        return(this);
-      }
-    }.init(peer).run();
+    }
   }
 
   @Override
@@ -130,19 +126,27 @@ public class MeerJobRunner extends
     this.masterIndex = peer.getNumPeers() / 2;
     this.masterName = peer.getPeerName(this.masterIndex);
     this.logPath = new Path(conf.get(MeerkatConstants.LOG_PATH_URI));
-    this.aggregationInterval = conf.getLong(MeerkatConstants.AGGREGATION_INTERVAL_URI, this.aggregationInterval);
-    this.pollingInterval = conf.getLong(MeerkatConstants.POLLING_INTERVAL_URI, this.pollingInterval);
-    this.isSignalServerNeed = conf.getBoolean(MeerkatConstants.SIGNAL_SERVER_SETUP_URI, this.isSignalServerNeed);
-    
-    Class<? extends GuardMeerInterface> guardClass = conf.getClass(MeerkatConstants.GUARDMEER_CLASS_URI, GuardMeer.class, GuardMeerInterface.class);
-    guardMeer = (GuardMeer)ReflectionUtils.newInstance(guardClass);
+    this.aggregationInterval = conf.getLong(
+        MeerkatConstants.AGGREGATION_INTERVAL_URI, this.aggregationInterval);
+    this.isSignalServerNeed = conf.getBoolean(
+        MeerkatConstants.SIGNAL_SERVER_SETUP_URI, this.isSignalServerNeed);
+
+    Class<? extends GuardMeerInterface> guardClass = conf.getClass(
+        MeerkatConstants.GUARDMEER_CLASS_URI, GuardMeer.class,
+        GuardMeerInterface.class);
+    guardMeer = (GuardMeer) ReflectionUtils.newInstance(guardClass);
     guardMeer.setRunner(this);
-    
-    Class<? extends BossMeerInterface> bossClass = conf.getClass(MeerkatConstants.BOSSMEER_CLASS_URI, BossMeer.class, BossMeerInterface.class);
-    bossMeer = (BossMeer)ReflectionUtils.newInstance(bossClass);
-    
-    Class<? extends SignalMeerInterface> signalClass = conf.getClass(MeerkatConstants.SIGNALMEER_CLASS_URI, SignalMeer.class, SignalMeerInterface.class);
-    signalMeer = (SignalMeer)ReflectionUtils.newInstance(signalClass, new Object[]{ this.conf });
+
+    Class<? extends BossMeerInterface> bossClass = conf.getClass(
+        MeerkatConstants.BOSSMEER_CLASS_URI, BossMeer.class,
+        BossMeerInterface.class);
+    bossMeer = (BossMeer) ReflectionUtils.newInstance(bossClass);
+
+    Class<? extends SignalMeerInterface> signalClass = conf.getClass(
+        MeerkatConstants.SIGNALMEER_CLASS_URI, SignalMeer.class,
+        SignalMeerInterface.class);
+    signalMeer = (SignalMeer) ReflectionUtils.newInstance(signalClass,
+        new Object[] { this.conf });
     signalMeer.setServer(this.isSignalServerNeed);
 
   }
@@ -150,11 +154,11 @@ public class MeerJobRunner extends
   public final BSPPeer<Writable, Writable, Writable, Writable, Writable> getPeer() {
     return this.peer;
   }
-  
+
   public final int getMasterIndex() {
     return this.masterIndex;
   }
-  
+
   public final String getMasterName() {
     return this.masterName;
   }
