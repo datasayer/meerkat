@@ -20,12 +20,16 @@ package com.datasayer.meerkat;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hama.HamaConfiguration;
 
 public class MeerkatMainTest {
+  private static final Log LOG = LogFactory.getLog(MeerkatMainTest.class);
+  
   public MeerkatMainTest() {
     
   }
@@ -56,7 +60,7 @@ public class MeerkatMainTest {
           maxLineLength = currValue;
         }
       }
-      System.out.println("find max : " + maxLineLength);
+      LOG.info("find max : " + maxLineLength);
 
       signalMeer.setResult(new Text("Current max length of line is :"
           + maxLineLength));
@@ -75,7 +79,6 @@ public class MeerkatMainTest {
     testJob.setSignalMeerClass(TextSignalMeer.class);
 
     testJob.setBossAggregationInterval(1000);
-    testJob.setNumBspTask(1);
     testJob.setSignalServer(true);
     testJob.waitForCompletion(false);
 

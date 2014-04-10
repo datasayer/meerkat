@@ -22,6 +22,8 @@ import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Writable;
@@ -45,6 +47,7 @@ public class MeerJobRunner extends
   private long filePointer = 0;
   private boolean isSignalServerNeed = MeerkatConstants.IS_SIGNAL_SERVER_SETUP;
   private long lastAggregatedTime = 0L;
+  private static final Log LOG = LogFactory.getLog(MeerJobRunner.class);
 
   @SuppressWarnings("unchecked")
   @Override
@@ -144,19 +147,20 @@ public class MeerJobRunner extends
         GuardMeerInterface.class);
     guardMeer = (GuardMeer) ReflectionUtils.newInstance(guardClass);
     guardMeer.setRunner(this);
+    
+    if(this.masterName.equals(peer.getPeerName())) {
+      Class<? extends BossMeerInterface> bossClass = conf.getClass(
+          MeerkatConstants.BOSSMEER_CLASS_URI, BossMeer.class,
+          BossMeerInterface.class);
+      bossMeer = (BossMeer) ReflectionUtils.newInstance(bossClass);
 
-    Class<? extends BossMeerInterface> bossClass = conf.getClass(
-        MeerkatConstants.BOSSMEER_CLASS_URI, BossMeer.class,
-        BossMeerInterface.class);
-    bossMeer = (BossMeer) ReflectionUtils.newInstance(bossClass);
-
-    Class<? extends SignalMeerInterface> signalClass = conf.getClass(
-        MeerkatConstants.SIGNALMEER_CLASS_URI, SignalMeer.class,
-        SignalMeerInterface.class);
-    signalMeer = (SignalMeer) ReflectionUtils.newInstance(signalClass,
-        new Object[] { this.conf });
-    signalMeer.setServer(this.isSignalServerNeed);
-
+      Class<? extends SignalMeerInterface> signalClass = conf.getClass(
+          MeerkatConstants.SIGNALMEER_CLASS_URI, SignalMeer.class,
+          SignalMeerInterface.class);
+      signalMeer = (SignalMeer) ReflectionUtils.newInstance(signalClass,
+          new Object[] { this.conf });
+      signalMeer.setServer(this.isSignalServerNeed);
+    }
   }
 
   public final BSPPeer<Writable, Writable, Writable, Writable, Writable> getPeer() {

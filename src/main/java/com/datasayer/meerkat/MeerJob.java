@@ -39,6 +39,7 @@ public class MeerJob extends BSPJob {
     super(conf);
     this.setOutputFormat(NullOutputFormat.class);
     this.setBspClass(MeerJobRunner.class);
+    this.setNumBspTask(1);
 
     this.conf.set(MeerkatConstants.SIGNAL_HOSTNAME_URI,
         MeerkatConstants.SIGNAL_HOSTNAME);
