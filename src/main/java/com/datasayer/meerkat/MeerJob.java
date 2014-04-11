@@ -39,6 +39,12 @@ public class MeerJob extends BSPJob {
     super(conf);
     this.setOutputFormat(NullOutputFormat.class);
     this.setBspClass(MeerJobRunner.class);
+    
+    // assign 1 task per server
+    this.getConfiguration().setInt("bsp.tasks.maximum", 1);
+    
+    // assign total task number = total server number
+    // cluster.getMaxTasks()  --> See PiEstimator example
     this.setNumBspTask(1);
 
     this.conf.set(MeerkatConstants.SIGNAL_HOSTNAME_URI,
