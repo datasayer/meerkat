@@ -33,6 +33,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hama.HamaConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -133,8 +134,6 @@ public class TestMeerkatMain extends TestCase {
     //fail("Not yet implemented");
     // Job launcher
     HamaConfiguration conf = new HamaConfiguration();
-    FileSystem fs = FileSystem.get(conf);
-    fs.deleteOnExit(new Path(testLogFileName));
     MeerJob testJob = null;
     try {
       testJob = new MeerJob(conf);
@@ -166,4 +165,10 @@ public class TestMeerkatMain extends TestCase {
     */
   }
 
+  @After
+  public void tearDown() throws Exception {
+    HamaConfiguration conf = new HamaConfiguration();
+    FileSystem fs = FileSystem.get(conf);
+    fs.delete(new Path(testLogFileName), true);
+  }
 }
